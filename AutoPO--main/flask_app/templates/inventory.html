@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory - INVOLEXIS{% endblock %}
+
+{% block breadcrumb %}Enterprise Overview / Inventory{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3>📦 Global Inventory (80,000+ Items)</h3>
+        <div class="search-box">
+            <input type="text" id="inventorySearch" placeholder="Filter by product name..."
+                style="padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); width: 300px;">
+        </div>
+    </div>
+
+    <div class="table-container" style="max-height: 70vh; overflow-y: auto;">
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Stock Available</th>
+                    <th>Units Sold</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventory %}
+                <tr class="inventory-row">
+                    <td>{{ item.product_id }}</td>
+                    <td><strong>{{ item.product_name }}</strong></td>
+                    <td
+                        style="font-weight: 700; {% if item.stock_available == 0 %}color: #842029; background: #F8D7DA;{% elif item.stock_available < 100 %}color: #664D03; background: #FFF3CD;{% endif %} border-radius: 4px;">
+                        {{ item.stock_available }}
+                    </td>
+                    <td>{{ item.units_sold }}</td>
+                    <td>
+                        {% if item.stock_available == 0 %}
+                        <span class="status-badge status-failed">OUT OF STOCK</span>
+                        {% elif item.stock_available < 100 %} <span class="status-badge status-pending">LOW STOCK</span>
+                            {% else %}
+                            <span class="status-badge status-completed">IN STOCK</span>
+                            {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">Inventory synchronization in progress...</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('inventorySearch').addEventListener('input', function () {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.inventory-row');
+
+        rows.forEach(row => {
+            let text = row.cells[1].textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

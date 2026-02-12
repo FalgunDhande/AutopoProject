@@ -1,0 +1,63 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask Dashboard",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "flask_app.app",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "FLASK_APP": "flask_app/app.py",
+                "FLASK_DEBUG": "1",
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "args": [
+                "run",
+                "--port",
+                "5001"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "Python: OCR Worker",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/services/po_ocr_worker_service.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Python: Email Ingestion",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/services/email_ingestion_imap.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "Python: All Services (Compound)",
+            "type": "debugpy",
+            "request": "launch",
+            "presentation": {
+                "hidden": true
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Pipeline (Flask + OCR + Email)",
+            "configurations": [
+                "Python: Flask Dashboard",
+                "Python: OCR Worker",
+                "Python: Email Ingestion"
+            ]
+        }
+    ]
+}

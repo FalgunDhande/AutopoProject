@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Email Monitor - INVOLEXIS{% endblock %}
+
+{% block breadcrumb %}Enterprise Overview / Email Monitor{% endblock %}
+
+{% block content %}
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="label">Emails Processed (Total)</div>
+        <div class="value">{{ stats.total_emails if stats else 0 }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="label">New Invoices Sent</div>
+        <div class="value text-success">{{ stats.total_emails if stats else 0 }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="label">Awaiting Vendor Reply</div>
+        <div class="value text-warning">0</div>
+    </div>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3>📧 Email-to-PO Ingestion History</h3>
+        <p style="color: var(--text-muted);">Real-time monitoring of attachments processed from Gmail.</p>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>PO Ref</th>
+                    <th>Sender</th>
+                    <th>Date Received</th>
+                    <th>OCR Status</th>
+                    <th>Invoiced?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for email in emails %}
+                <tr>
+                    <td><strong>{{ email.po_number }}</strong></td>
+                    <td>{{ email.sender_email }}</td>
+                    <td>{{ email.created_at }}</td>
+                    <td>
+                        <span
+                            class="status-badge {% if email.status == 'COMPLETED' %}status-completed{% else %}status-pending{% endif %}">
+                            {{ email.status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if email.status == 'COMPLETED' %}
+                        <i class="fas fa-check-circle" style="color: var(--accent-color);"></i> Sent
+                        {% else %}
+                        <i class="fas fa-clock" style="color: var(--text-muted);"></i> Pending
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No email ingestion history available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

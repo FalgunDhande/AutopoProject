@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}generated Invoices - INVOLEXIS{% endblock %}
+
+{% block breadcrumb %}Enterprise Overview / Invoices{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3>📄 Generated Invoice Repository</h3>
+        <p style="color: var(--text-muted);">Access and download all system-generated PDF invoices.</p>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Generation Date</th>
+                    <th>Size</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in invoices %}
+                <tr>
+                    <td><strong>{{ inv.name }}</strong></td>
+                    <td>{{ inv.date }}</td>
+                    <td>{{ inv.size }}</td>
+                    <td>
+                        <a href="{{ url_for('download_file', filename=inv.name) }}" class="btn btn-teal btn-sm"><i
+                                class="fas fa-download"></i> Download</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">No invoices generated yet. Run the pipeline to create
+                        invoices.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

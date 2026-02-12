@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}INVOLEXIS Dashboard{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">INVOLEXIS</div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}"><i
+                                class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="{{ url_for('orders') }}"
+                            class="{% if request.endpoint == 'orders' %}active{% endif %}"><i class="fas fa-box"></i>
+                            Purchase Orders</a></li>
+                    <li><a href="{{ url_for('invoices') }}"
+                            class="{% if request.endpoint == 'invoices' %}active{% endif %}"><i
+                                class="fas fa-file-invoice-dollar"></i> Invoices</a></li>
+                    <li><a href="{{ url_for('emails') }}"
+                            class="{% if request.endpoint == 'emails' %}active{% endif %}"><i
+                                class="fas fa-envelope"></i> Email Monitor</a></li>
+                    <li><a href="{{ url_for('json_files') }}"
+                            class="{% if request.endpoint == 'json_files' %}active{% endif %}"><i
+                                class="fas fa-file-code"></i> JSON Files</a></li>
+                    <li><a href="{{ url_for('inventory') }}"
+                            class="{% if request.endpoint == 'inventory' %}active{% endif %}"><i
+                                class="fas fa-warehouse"></i> Inventory</a></li>
+                    <li><a href="{{ url_for('control_center') }}"
+                            class="{% if request.endpoint == 'control_center' %}active{% endif %}"><i
+                                class="fas fa-rocket"></i> Control Center</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot online"></span> Database Online
+                </div>
+                <div class="version">v3.0.0 Pro</div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="breadcrumb">
+                    {% block breadcrumb %}Enterprise Overview{% endblock %}
+                </div>
+                <div class="user-profile">
+                    <span class="badge">Technical Project Edition</span>
+                    <i class="fas fa-user-circle"></i> Admin
+                </div>
+            </header>
+
+            <div class="page-container">
+                {% block content %}{% endblock %}
+            </div>
+
+            <footer class="footer">
+                <p>&copy; 2026 Involexis AI Pipeline. Built with Flask & Modern Web Technologies.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+cd ~/Desktop                                                   
+source po_pipeline/venv/bin/activate
+python -m po_pipeline.email_ingestion.email_ingestion_imap
+
+cd ~/Desktop                                                   
+source po_pipeline/venv/bin/activate
+python -m po_pipeline.po_ocr_worker_service
+
+psql po_db
+SELECT * FROM purchase_orders;
+SELECT * FROM purchase_order_items;

@@ -1,0 +1,258 @@
+{
+  "20260126_153028_b1eae449.pdf": {
+    "status": "pending",
+    "received_at": "20260126_153028"
+  },
+  "20260126_153314_8f6cfbb3.pdf": {
+    "status": "processed",
+    "received_at": "20260126_153314"
+  },
+  "5730b52f_5000337699_P.O..pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Garvit Gupta <garvit.cdac.mum.aug25@gmail.com>",
+      "received_at": "Mon, 26 Jan 2026 23:41:43 +0530"
+    }
+  },
+  "20260126_235356_c5d9d39b_email_body.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Garvit Gupta <garvitgupta2444@gmail.com>",
+      "received_at": "Mon, 26 Jan 2026 23:53:06 +0530"
+    }
+  },
+  "20260127_151658_6ec81063.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Tue, 27 Jan 2026 15:15:53 +0530"
+    },
+    "error": "connection to server at \"localhost\" (127.0.0.1), port 5432 failed: FATAL:  role \"postgres\" does not exist\n"
+  },
+  "20260127_153039_4cd9af62.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Tue, 27 Jan 2026 15:30:17 +0530"
+    },
+    "error": "can't adapt type 'dict'"
+  },
+  "20260127_154011_c994f454.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Tue, 27 Jan 2026 15:39:17 +0530"
+    },
+    "json": "20260127_154011_c994f454.json"
+  },
+  "20260128_013055_024a5a27.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 27 Jan 2026 11:15:24 -0800 (PST)"
+    },
+    "json": "20260128_013055_024a5a27.json"
+  },
+  "20260128_013102_09879e9c.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 27 Jan 2026 11:09:54 -0800 (PST)"
+    },
+    "json": "20260128_013102_09879e9c.json"
+  },
+  "20260128_160754_6cb84344.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Wed, 28 Jan 2026 16:04:09 +0530"
+    },
+    "json": "20260128_160754_6cb84344.json"
+  },
+  "20260128_162143_44204457.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Wed, 28 Jan 2026 16:21:25 +0530"
+    },
+    "json": "20260128_162143_44204457.json"
+  },
+  "20260128_163458_3209dabd.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Wed, 28 Jan 2026 16:34:37 +0530"
+    },
+    "json": "20260128_163458_3209dabd.json"
+  },
+  "20260128_164628_e01bdc45.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Garvit Gupta <garvit.cdac.mum.aug25@gmail.com>",
+      "received_at": "Wed, 28 Jan 2026 16:46:09 +0530"
+    },
+    "json": "20260128_164628_e01bdc45.json"
+  },
+  "20260128_184652_ac23d16b.pdf": {
+    "status": "pending",
+    "email_metadata": {
+      "from_email": "Falgun Dhande <erfalgundhande@gmail.com>",
+      "received_at": "Wed, 28 Jan 2026 18:46:32 +0530"
+    }
+  },
+  "20260129_152917_27059c6c.pdf": {
+    "status": "pending",
+    "email_metadata": {
+      "from_email": "Garvit Gupta <garvit.cdac.mum.aug25@gmail.com>",
+      "received_at": "Thu, 29 Jan 2026 15:28:58 +0530"
+    }
+  },
+  "20260129_154234_ccb10617.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Garvit Gupta <garvit.cdac.mum.aug25@gmail.com>",
+      "received_at": "Thu, 29 Jan 2026 15:42:16 +0530"
+    },
+    "json": "20260129_154234_ccb10617.json"
+  },
+  "20260130_123147_4878029f_email_body.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Thu, 29 Jan 2026 20:45:32 -0800 (PST)"
+    },
+    "error": "invalid input syntax for type numeric: \"\"\nLINE 7: ...     VALUES ('',NULL,'','[Company Name]','','','','','{\"file...\n                                                             ^\n"
+  },
+  "20260130_123214_27d18fdb.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Thu, 29 Jan 2026 23:02:09 -0800 (PST)"
+    },
+    "json": "20260130_123214_27d18fdb.json"
+  },
+  "test_po_verification.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "test@example.com",
+      "received_at": "Fri, 30 Jan 2026 13:00:00 +0530"
+    },
+    "json": "test_po_verification.json"
+  },
+  "20260130_131920_ecdf2ea0.png": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "received_at": "Thu, 29 Jan 2026 23:49:11 -0800 (PST)"
+    },
+    "error": "Unable to get page count.\nSyntax Warning: May not be a PDF file (continuing anyway)\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't read xref table\n"
+  },
+  "20260130_131920_a75dc616.png": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "received_at": "Thu, 29 Jan 2026 23:49:11 -0800 (PST)"
+    },
+    "error": "Unable to get page count.\nSyntax Warning: May not be a PDF file (continuing anyway)\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't read xref table\n"
+  },
+  "PO-SIM-1770756808.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "simulation@test.com",
+      "received_at": "Tue, 10 Feb 2026 20:53:28 +0000",
+      "subject": "Purchase Order PO-SIM-1770756808"
+    },
+    "error": "HTTPConnectionPool(host='localhost', port=11434): Max retries exceeded with url: /api/generate (Caused by NewConnectionError(\"HTTPConnection(host='localhost', port=11434): Failed to establish a new connection: [Errno 111] Connection refused\"))"
+  },
+  "PO-SIM-1770756880.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "simulation@test.com",
+      "received_at": "Tue, 10 Feb 2026 20:54:40 +0000",
+      "subject": "Purchase Order PO-SIM-1770756880"
+    },
+    "error": "'response'"
+  },
+  "PO-SIM-1770757002.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "simulation@test.com",
+      "received_at": "Tue, 10 Feb 2026 20:56:42 +0000",
+      "subject": "Purchase Order PO-SIM-1770757002"
+    },
+    "error": "'response'",
+    "json": "PO-SIM-1770757002.json"
+  },
+  "PO-SIM-1770757280.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "simulation@test.com",
+      "received_at": "Tue, 10 Feb 2026 21:01:20 +0000",
+      "subject": "Purchase Order PO-SIM-1770757280"
+    },
+    "json": "PO-SIM-1770757280.json"
+  },
+  "20260210_210710_24eda463.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 10 Feb 2026 13:07:08 -0800 (PST)"
+    },
+    "json": "20260210_210710_24eda463.json"
+  },
+  "20260210_210857_effe1bc3.png": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "received_at": "Tue, 10 Feb 2026 13:08:50 -0800 (PST)"
+    },
+    "error": "Unable to get page count.\nSyntax Warning: May not be a PDF file (continuing anyway)\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't read xref table\n"
+  },
+  "20260210_212143_7334f4ac.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 10 Feb 2026 13:21:20 -0800 (PST)"
+    },
+    "error": "PaddleOCR.predict() got an unexpected keyword argument 'cls'"
+  },
+  "20260210_212218_3fe91ea1.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 10 Feb 2026 13:22:12 -0800 (PST)"
+    },
+    "error": "PaddleOCR.predict() got an unexpected keyword argument 'cls'"
+  },
+  "20260210_212252_1679deaa.pdf": {
+    "status": "pending",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 10 Feb 2026 13:22:49 -0800 (PST)"
+    }
+  },
+  "20260210_212252_98e66da2.pdf": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "involexis.team@gmail.com",
+      "received_at": "Tue, 10 Feb 2026 13:22:49 -0800 (PST)"
+    },
+    "error": "PaddleOCR.predict() got an unexpected keyword argument 'cls'"
+  },
+  "20260210_214546_fb688a5d.pdf": {
+    "status": "processed",
+    "email_metadata": {
+      "from_email": "Garvit Gupta <garvit.cdac.mum.aug25@gmail.com>",
+      "received_at": "Wed, 11 Feb 2026 03:15:26 +0530"
+    },
+    "json": "20260210_214546_fb688a5d.json"
+  },
+  "20260210_220329_169908f4.png": {
+    "status": "failed",
+    "email_metadata": {
+      "from_email": "Mail Delivery Subsystem <mailer-daemon@googlemail.com>",
+      "received_at": "Tue, 10 Feb 2026 14:03:22 -0800 (PST)"
+    },
+    "error": "Unable to get page count.\nSyntax Warning: May not be a PDF file (continuing anyway)\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't find trailer dictionary\nSyntax Error: Couldn't read xref table\n"
+  }
+}

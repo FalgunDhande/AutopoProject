@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}Control Center - INVOLEXIS{% endblock %}
+
+{% block breadcrumb %}Enterprise Overview / Control Center{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+        <i class="fas fa-rocket fa-3x" style="color: var(--primary-color);"></i>
+        <div>
+            <h2>⚡ Pipeline Mastery</h2>
+            <p style="color: var(--text-muted);">Trigger end-to-end automation: Fetch, Process, and Sync.</p>
+        </div>
+    </div>
+
+    <div style="background: #EBF2F7; padding: 25px; border-radius: 12px; border: 1px dashed var(--primary-color);">
+        <button id="runPipelineBtn" class="btn btn-primary"
+            style="width: 100%; justify-content: center; font-size: 1.2rem; padding: 15px;">
+            <i class="fas fa-play"></i> RUN FULL AUTOMATION PIPELINE
+        </button>
+        <div id="pipelineStatus" style="margin-top: 20px; text-align: center; display: none;">
+            <i class="fas fa-circle-notch fa-spin"></i> <span id="statusMessage">Initializing system...</span>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="display: flex; gap: 30px;">
+    <div class="card" style="flex: 1;">
+        <h3>📬 Email Ingestion</h3>
+        <p style="margin: 15px 0; color: var(--text-muted);">Manually trigger Gmail fetch for new PO attachments.</p>
+        <button class="btn btn-teal service-trigger" data-service="ingestion">Trigger Service</button>
+    </div>
+    <div class="card" style="flex: 1;">
+        <h3>🔍 OCR Worker</h3>
+        <p style="margin: 15px 0; color: var(--text-muted);">Start AI-based extraction on pending PDFs in the incoming
+            folder.</p>
+        <button class="btn btn-teal service-trigger" data-service="ocr">Trigger Worker</button>
+    </div>
+</div>
+
+<div class="card">
+    <h3>⚙️ System Engine Diagnostics</h3>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+        <div style="padding: 15px; border: 1px solid var(--border-color); border-radius: 8px;">
+            <small>Database Status</small>
+            <div style="font-weight: 700; color: var(--accent-color);">CONNECTED</div>
+        </div>
+        <div style="padding: 15px; border: 1px solid var(--border-color); border-radius: 8px;">
+            <small>AI Model (Qwen 2.5)</small>
+            <div style="font-weight: 700; color: var(--accent-color);">LOCAL READY</div>
+        </div>
+        <div style="padding: 15px; border: 1px solid var(--border-color); border-radius: 8px;">
+            <small>Memory Usage</small>
+            <div style="font-weight: 700;">STABLE</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>📧 SMTP Configuration Test</h3>
+    <p style="margin: 15px 0; color: var(--text-muted);">Send a test email to verify your SMTP settings and signature.
+    </p>
+    <div style="display: flex; gap: 10px; max-width: 500px;">
+        <input type="email" id="testEmailAddr" class="form-control" value="ggarvit392@gmail.com"
+            style="flex: 2; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;">
+        <button id="sendTestEmailBtn" class="btn btn-teal" style="flex: 1;">Send Test Email</button>
+    </div>
+    <div id="testEmailStatus" style="margin-top: 10px; font-weight: 500;"></div>
+</div>
+
+<div class="card">
+    <h3>📋 Live Pipeline Logs</h3>
+    <div id="logViewer"
+        style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: 'Courier New', Courier, monospace; height: 300px; overflow-y: auto; font-size: 0.9rem; margin-top: 15px;">
+        Waiting for logs...
+    </div>
+</div>
+
+<script>
+    const logViewer = document.getElementById('logViewer');
+
+    function appendLog(text) {
+        const line = document.createElement('div');
+        line.innerText = text;
+        logViewer.appendChild(line);
+        logViewer.scrollTop = logViewer.scrollHeight;
+    }
+
+    function startLogStream() {
+        logViewer.innerText = '';
+        fetch('/api/logs')
+            .then(response => {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                function read() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) return;
+                        const chunk = decoder.decode(value, { stream: true });
+                        chunk.split('\n').forEach(line => {
+                            if (line.strip) appendLog(line);
+                            else if (line.trim()) appendLog(line);
+                        });
+                        read();
+                    });
+                }
+                read();
+            });
+    }
+
+    document.getElementById('runPipelineBtn').addEventListener('click', function () {
+        const btn = this;
+        const status = document.getElementById('pipelineStatus');
+        const msg = document.getElementById('statusMessage');
+
+        btn.disabled = true;
+        status.style.display = 'block';
+        msg.innerText = "Triggering Full Pipeline...";
+
+        fetch('/api/pipeline/run', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                msg.innerText = data.message;
+                startLogStream();
+                setTimeout(() => {
+                    btn.disabled = false;
+                    status.style.display = 'none';
+                }, 2000);
+            })
+            .catch(err => {
+                msg.innerText = "Error triggering pipeline.";
+                btn.disabled = false;
+            });
+    });
+
+    document.querySelectorAll('.service-trigger').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const service = this.getAttribute('data-service');
+            fetch(`/api/pipeline/run?service=${service}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    startLogStream();
+                });
+        });
+    });
+
+    // Test Email Handler
+    document.getElementById('sendTestEmailBtn').addEventListener('click', function () {
+        const btn = this;
+        const email = document.getElementById('testEmailAddr').value;
+        const status = document.getElementById('testEmailStatus');
+
+        if (!email) {
+            status.innerText = "❌ Please enter an email address.";
+            status.style.color = "red";
+            return;
+        }
+
+        btn.disabled = true;
+        status.innerText = "⏳ Sending test email...";
+        status.style.color = "var(--primary-color)";
+
+        fetch('/api/test-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        })
+            .then(response => response.json())
+            .then(data => {
+                btn.disabled = false;
+                if (data.status === 'success') {
+                    status.innerText = "✅ " + data.message;
+                    status.style.color = "green";
+                } else {
+                    status.innerText = "❌ Error: " + data.message;
+                    status.style.color = "red";
+                }
+            })
+            .catch(err => {
+                btn.disabled = false;
+                status.innerText = "❌ Failed to reach server.";
+                status.style.color = "red";
+            });
+    });
+
+    // Start logs on load
+    startLogStream();
+</script>
+{% endblock %}

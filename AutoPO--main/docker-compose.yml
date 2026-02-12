@@ -1,0 +1,187 @@
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: po_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-po_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASS:-postgres}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./config/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - po-network
+    restart: unless-stopped
+
+  # Ollama LLM Service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: po_ollama
+    volumes:
+      - ollama-models:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - po-network
+    restart: unless-stopped
+
+  # Flask Dashboard
+  flask-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: po_flask
+    command: python flask_app/app.py
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-po_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+      - OLLAMA_URL=http://ollama:11434/api/generate
+      - FLASK_ENV=production
+    volumes:
+      - ./incoming:/app/incoming
+      - ./processed_json:/app/processed_json
+      - ./invoices:/app/invoices
+      - ./logs:/app/logs
+      - ./manifest.json:/app/manifest.json
+      - ./Sales_history.csv:/app/Sales_history.csv
+      - ./dataset.xlsx:/app/dataset.xlsx
+    ports:
+      - "5001:5001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - po-network
+    restart: unless-stopped
+
+  # Email Ingestion Service
+  email-ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: po_email_ingestion
+    command: python services/email_ingestion_imap.py
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-po_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+    volumes:
+      - ./incoming:/app/incoming
+      - ./logs:/app/logs
+      - ./manifest.json:/app/manifest.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - po-network
+    restart: unless-stopped
+
+  # OCR Worker Service
+  ocr-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: po_ocr_worker
+    command: python services/po_ocr_worker_service.py
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-po_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+      - OLLAMA_URL=http://ollama:11434/api/generate
+    volumes:
+      - ./incoming:/app/incoming
+      - ./processed_json:/app/processed_json
+      - ./processing:/app/processing
+      - ./failed:/app/failed
+      - ./logs:/app/logs
+      - ./manifest.json:/app/manifest.json
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - po-network
+    restart: unless-stopped
+
+  # Reply Listener Service
+  reply-listener:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: po_reply_listener
+    command: python services/reply_listener.py
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-po_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - OLLAMA_URL=http://ollama:11434/api/generate
+    volumes:
+      - ./invoices:/app/invoices
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - po-network
+    restart: unless-stopped
+
+  # Scheduler Service
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: po_scheduler
+    command: python services/scheduler.py
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-po_db}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASS=${DB_PASS:-postgres}
+    volumes:
+      - ./ML_model:/app/ML_model
+      - ./logs:/app/logs
+      - ./Sales_history.csv:/app/Sales_history.csv
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - po-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+    driver: local
+  ollama-models:
+    driver: local
+
+networks:
+  po-network:
+    driver: bridge

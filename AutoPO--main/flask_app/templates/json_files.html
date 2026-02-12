@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}JSON Files - INVOLEXIS{% endblock %}
+
+{% block breadcrumb %}Enterprise Overview / JSON Repository{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h3>📋 Processed Data Repository</h3>
+        <p style="color: var(--text-muted);">View and download extracted JSON data from purchase orders.</p>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Date Processed</th>
+                    <th>Size</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in json_files %}
+                <tr>
+                    <td><strong>{{ file.name }}</strong></td>
+                    <td>{{ file.date }}</td>
+                    <td>{{ file.size }}</td>
+                    <td>
+                        <button class="btn btn-teal btn-sm view-json" data-path="{{ file.path }}"
+                            data-name="{{ file.name }}">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">No processed JSON files found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal for JSON Preview -->
+<div id="jsonModal"
+    style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+    <div
+        style="background: white; margin: 5% auto; padding: 30px; border-radius: 12px; width: 80%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-lg);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 id="modalTitle">JSON Data Preview</h3>
+            <button id="closeModal" class="btn btn-sm" style="background: #E9ECEF;"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <pre id="jsonContent"
+            style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.85rem; overflow-x: auto;"></pre>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.view-json').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const path = this.getAttribute('data-path');
+            const name = this.getAttribute('data-name');
+
+            fetch(`/api/json-view?path=${encodeURIComponent(path)}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('modalTitle').innerText = name;
+                    document.getElementById('jsonContent').innerText = JSON.stringify(data, null, 4);
+                    document.getElementById('jsonModal').style.display = 'block';
+                });
+        });
+    });
+
+    document.getElementById('closeModal').onclick = () => {
+        document.getElementById('jsonModal').style.display = 'none';
+    };
+
+    window.onclick = (event) => {
+        if (event.target == document.getElementById('jsonModal')) {
+            document.getElementById('jsonModal').style.display = 'none';
+        }
+    };
+</script>
+{% endblock %}

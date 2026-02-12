@@ -1,0 +1,36 @@
+# Virtual Environment (Highly recommended to ignore)
+venv/
+.venv/
+env/
+bin/
+lib/
+share/
+pyvenv.cfg
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS Trash
+.DS_Store
+Thumbs.db
+
+# Keep everything else as requested (.xlsx, .csv, processed_json, invoices, etc.)
+
+# Environment Variables (CRITICAL: Never commit this)
+.env
+
+# Automation Logs
+logs/*.log
+*.log
+flask_app.log
+flask_debug.log
+
+# Temporary Processing Folders
+failed/
+processing/
+test_assets/
+incoming/
+invoices/
+processed_json/

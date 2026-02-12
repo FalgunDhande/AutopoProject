@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Home - INVOLEXIS{% endblock %}
+
+{% block breadcrumb %}Enterprise Overview / Dashboard{% endblock %}
+
+{% block content %}
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="label">Total Purchase Orders</div>
+        <div class="value">{{ summary.total_pos if summary else 0 }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="label">Completed Orders</div>
+        <div class="value text-success">{{ summary.completed if summary else 0 }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="label">Total Emails</div>
+        <div class="value">{{ summary.total_emails if summary else 0 }}</div>
+    </div>
+    <div class="metric-card">
+        <div class="label">Failed / Pending</div>
+        <div class="value text-warning">{{ summary.failed if summary else 0 }}</div>
+    </div>
+</div>
+
+<div class="row" style="display: flex; gap: 30px;">
+    <div class="card" style="flex: 2;">
+        <h3>📈 Top Performing Products</h3>
+        <div id="salesChart"
+            style="height: 400px; margin-top: 20px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px;">
+            <div class="empty-msg" style="color: #6c757d; font-style: italic;">No sales data available.
+            </div>
+        </div>
+    </div>
+    <div class="card" style="flex: 1;">
+        <h3>📊 Status Distribution</h3>
+        <div id="statusChart" style="height: 400px; margin-top: 20px;"></div>
+    </div>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3>🕒 Live Activity Feed</h3>
+        <a href="{{ url_for('orders') }}" class="btn btn-primary btn-sm">View All Orders</a>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>PO Number</th>
+                    <th>Buyer</th>
+                    <th>Status</th>
+                    <th>Total Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in activity %}
+                <tr>
+                    <td><strong>{{ log.po_number }}</strong></td>
+                    <td>{{ log.buyer }}</td>
+                    <td>
+                        <span
+                            class="status-badge {% if log.status == 'COMPLETED' %}status-completed{% elif log.status == 'FAILED' %}status-failed{% else %}status-pending{% endif %}">
+                            {{ log.status }}
+                        </span>
+                    </td>
+                    <td>${{ "{:,.2f}".format(log.total_amount) }}</td>
+                    <td>{{ log.created_at }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No recent activity found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    // Sales Chart
+    const salesData = {{ sales_data | safe }};
+    if (salesData && salesData.length > 0) {
+        document.getElementById('salesChart').innerHTML = '';
+        const trace = {
+            x: salesData.map(d => d.product_name),
+            y: salesData.map(d => d.total_quantity),
+            type: 'bar',
+            marker: {
+                color: '#1B4965'
+            }
+        };
+        const layout = {
+            margin: { t: 20, r: 20, b: 120, l: 60 },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            font: { family: 'Inter', color: '#1B4965' },
+            xaxis: {
+                tickangle: -45,
+                automargin: true
+            },
+            yaxis: {
+                title: 'Quantity'
+            }
+        };
+        Plotly.newPlot('salesChart', [trace], layout);
+    }
+
+    // Status Chart
+    const statusData = {{ status_data | safe }};
+    if (statusData) {
+        const data = [{
+            values: [statusData.completed, statusData.partial, statusData.pending, statusData.failed],
+            labels: ['Completed', 'Partial', 'Pending', 'Failed'],
+            type: 'pie',
+            hole: 0.4,
+            marker: {
+                colors: ['#1B4965', '#2A9D8F', '#E9ECEF', '#CED4DA']
+            }
+        }];
+        const layout = {
+            margin: { t: 0, r: 0, b: 0, l: 0 },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            font: { family: 'Inter', color: '#1B4965' },
+            legend: { orientation: 'h', y: -0.2 }
+        };
+        Plotly.newPlot('statusChart', data, layout);
+    }
+</script>
+{% endblock %}
